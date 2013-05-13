@@ -1,10 +1,15 @@
 # coding: utf-8
+import ConfigParser
+import tempfile
 from unittest import TestCase
 from urlparse import parse_qs
 from httpretty import HTTPretty
 from httpretty.compat import PY3
 import mock
+import sh
+from werkzeug.test import Client
 from releasedate import jenkins
+from releasedate.server import Releasedate
 
 
 class HttprettyCase(TestCase):
@@ -42,6 +47,41 @@ class TestClient(HttprettyCase):
                                       'job_url': ['http://jenkins_url/jobs/42/'],
                                       'repo': ['/path/to/my/repo/'],
                                       })
+
+class TestServer(HttprettyCase):
+
+    def setUp(self):
+        self.dir = tempfile.mkdtemp()
+        sh.cd(self.dir)
+        sh.git.init()
+        sh.git('config', 'user.name', '"Guido"')
+        sh.git('config', 'user.email', '"me@here.com"')
+        sh.touch('README')
+        sh.git.commit('-am', 'first commit')
+        sh.git.tag('jenkins-release-1')
+        sh.touch('file1')
+        sh.git.commit('-am', 'second commit #777 #123')
+        sh.git.tag('jenkins-release-2')
+        sh.touch('file2')
+        sh.git.commit('-am', '#67 third commit')
+        sh.git.tag('jenkins-release-3')
+
+    def test_ok(self):
+        HTTPretty.register_uri(HTTPretty.POST, "http://redmine/", status=200)
+
+        config = ConfigParser.ConfigParser().read('release.cfg')
+        client = Client(Releasedate(config))
+        client.post(data={'build_number': '42',
+                          'build_tag': 'jenkins-myjob-42',
+                          'previous_tag': 'jenkins-myjob-41',
+                          'job_url': 'http://jenkins_url/jobs/42/',
+                          'repo': '/path/to/my/repo/',
+        })
+
+
+        #assert request per ticket to redmine issued
+
+
 
 # redmine-release-server
 # test bad args
