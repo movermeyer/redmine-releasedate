@@ -15,7 +15,7 @@ from httpretty.compat import PY3
 from werkzeug.test import Client
 from werkzeug.wrappers import BaseResponse
 from releasedate import jenkins
-from releasedate.server import Releasedate
+from releasedate.server import Releasedate, main
 
 
 class ReleasedateTestCase(TestCase):
@@ -58,6 +58,15 @@ class TestClient(ReleasedateTestCase):
                                       'job_url': ['http://jenkins_url/jobs/42/'],
                                       'repo': ['/path/to/my/repo/'],
                                       })
+
+
+class TestRunServer(TestCase):
+
+    @mock.patch('releasedate.server.run_simple')
+    def test_run(self, run_simple):
+        main()
+        run_simple.assert_called_with('0.0.0.0', 3051, mock.ANY)
+        assert type(run_simple.call_args[0][2]) == Releasedate
 
 
 class TestServerOk(ReleasedateTestCase):

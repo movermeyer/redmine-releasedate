@@ -70,9 +70,13 @@ class Releasedate(object):
         return self.wsgi_app(environ, start_response)
 
 
-if __name__ == '__main__':
+def main():
     log.addHandler(logging.StreamHandler())
     log.setLevel(logging.INFO)
     config = ConfigParser.ConfigParser()
     config.read('releasedate.cfg')
     run_simple('0.0.0.0', 3051, Releasedate(config))
+
+
+if __name__ == '__main__':
+    main()  # pragma: no cover
