@@ -22,7 +22,7 @@ setup(
     version='0.1',
     packages=['releasedate'],
     url='https://github.com/futurecolors/redmine-releasedate',
-    requires=['requests', 'GitPython', 'werkzeug'],
+    requires=['requests', 'GitPython', 'Werkzeug'],
     tests_require=['pytest', 'httpretty', 'mock', 'sh'],
     cmdclass={'test': PyTest},
     license='MIT',
