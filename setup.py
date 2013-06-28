@@ -23,7 +23,7 @@ setup(
     packages=['releasedate'],
     url='https://github.com/futurecolors/redmine-releasedate',
     requires=['requests', 'GitPython', 'werkzeug'],
-    tests_require=['httpretty', 'mock', 'sh'],
+    tests_require=['pytest', 'httpretty', 'mock', 'sh'],
     cmdclass={'test': PyTest},
     license='MIT',
     author='Ilya Baryshev',

@@ -1,13 +1,14 @@
 # coding: utf-8
-import ConfigParser
-from functools import partial
 import logging
 import itertools
+import ConfigParser
+from functools import partial
+from operator import contains
 
 from werkzeug.serving import run_simple
 from werkzeug.wrappers import Request, Response
 
-from releasedate.git import GitRepo
+from releasedate.repo import GitRepo
 from releasedate.redmine import Redmine
 
 
@@ -17,7 +18,7 @@ log = logging.getLogger('redmine-releasedate')
 class Releasedate(object):
 
     def __init__(self, config):
-        self.message = config.get('releasedate', 'message')
+        self.message = config.get('releasedate', 'message', raw=True)
         self.tracker = Redmine(host=config.get('redmine', 'url'),
                                api_key=config.get('redmine', 'token'),
                                custom_field_id=config.get('redmine', 'released_at_id'))
@@ -34,7 +35,7 @@ class Releasedate(object):
             release_date = repo.tag_date(request.form['build_tag'])
 
             message = self.message % {
-                'instance': request.form.get('instance'),
+                'instance': request.form.get('instance', 'server'),
                 'date': release_date,
                 'release_id': request.form['build_number'],
                 'release_url': request.form['job_url']
@@ -47,10 +48,10 @@ class Releasedate(object):
             return Response('OK')
 
         except Exception as e:
-            return Response(str(e), status=500)
+            return Response(repr(e), status=500)
 
     def is_valid(self, request):
-        if all(map(partial(hasattr, request), ('build_number', 'build_tag', 'previous_tag', 'job_url', 'repo'))):
+        if all(map(partial(contains, request.form), ('build_number', 'build_tag', 'previous_tag', 'job_url', 'repo'))):
             return True
         return False
 
@@ -67,5 +68,5 @@ if __name__ == '__main__':
     log.addHandler(logging.StreamHandler())
     log.setLevel(logging.INFO)
     config = ConfigParser.ConfigParser()
-    config.read('release.cfg')
+    config.read('releasedate.cfg')
     run_simple('0.0.0.0', 3051, Releasedate(config))
