@@ -4,6 +4,12 @@ Redmine releasedate
 Track when your features are shipped to production in Redmine.
 Currently supports git & jenkins.
 
+.. image:: https://travis-ci.org/futurecolors/redmine-releasedate.png?branch=master
+    :target: https://travis-ci.org/futurecolors/redmine-releasedate
+
+.. image:: https://coveralls.io/repos/futurecolors/redmine-releasedate/badge.png?branch=master
+    :target: https://coveralls.io/r/futurecolors/redmine-releasedate
+
 How it works
 ------------
 
@@ -21,7 +27,7 @@ Server
 Install it where your git repo resides. We only support local git repos, so make sure you have enough permissions.
 
 * ``pip install redmine-releasedate``
-* Specify redmine access options in config.py
+* Specify redmine access options in ``releasedate.cfg``
 * run ``redmine-release-server`` and make it available via http
 ::
 
@@ -32,6 +38,8 @@ Install it where your git repo resides. We only support local git repos, so make
     released_at_id = 42  ;custom field id goes here
 
     [releasedate]
+    address = 0.0.0.0  ; optional
+    port = 8080  ; optional
     message = Deployed on %(instance)s at %(date)s in release "%(release_id)s":%(release_url)s
 
 

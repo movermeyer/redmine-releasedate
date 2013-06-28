@@ -65,7 +65,7 @@ class TestRunServer(TestCase):
     @mock.patch('releasedate.server.run_simple')
     def test_run(self, run_simple):
         main()
-        run_simple.assert_called_with('0.0.0.0', 3051, mock.ANY)
+        run_simple.assert_called_with('0.0.0.0', 8080, mock.ANY)
         assert type(run_simple.call_args[0][2]) == Releasedate
 
 

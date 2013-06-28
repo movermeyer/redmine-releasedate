@@ -73,9 +73,15 @@ class Releasedate(object):
 def main():
     log.addHandler(logging.StreamHandler())
     log.setLevel(logging.INFO)
-    config = ConfigParser.ConfigParser()
+    defaults = {
+        'address': '0.0.0.0',
+        'port': 8080,
+    }
+    config = ConfigParser.ConfigParser(defaults=defaults)
     config.read('releasedate.cfg')
-    run_simple('0.0.0.0', 3051, Releasedate(config))
+    address = config.get('releasedate', 'address')
+    port = int(config.get('releasedate', 'port'))
+    run_simple(address, port, Releasedate(config))
 
 
 if __name__ == '__main__':
