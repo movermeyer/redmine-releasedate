@@ -28,24 +28,8 @@ class Releasedate(object):
             return Response('Bad arguments', status=409)
 
         try:
-            repo = GitRepo(request.form['repo'])
-            messages = repo.commit_messages(request.form['previous_tag'], request.form['build_tag'])
-            flatten = itertools.chain.from_iterable
-            ticket_ids = set(flatten(itertools.imap(Redmine.get_ticket_id, messages)))
-            release_date = repo.tag_date(request.form['build_tag'])
-
-            message = self.message % {
-                'instance': request.form.get('instance', 'server'),
-                'date': release_date,
-                'release_id': request.form['build_number'],
-                'release_url': request.form['job_url']
-            }
-
-            for ticket_id in ticket_ids:
-                self.tracker.issue(ticket_id).log_release_date(release_date, message=message)
-                log.info('%s: %s', ticket_id, release_date)
-                log.info(message)
-            return Response('OK')
+            status = self.process_release(request.form)
+            return Response(status)
 
         except Exception as e:
             return Response(repr(e), status=500)
@@ -54,6 +38,28 @@ class Releasedate(object):
         if all(map(partial(contains, request.form), ('build_number', 'build_tag', 'previous_tag', 'job_url', 'repo'))):
             return True
         return False
+
+    def process_release(self, data):
+        status = 'OK'
+        repo = GitRepo(data['repo'])
+        messages = repo.commit_messages(data['previous_tag'], data['build_tag'])
+        flatten = itertools.chain.from_iterable
+        ticket_ids = set(flatten(itertools.imap(Redmine.get_ticket_id, messages)))
+        release_date = repo.tag_date(data['build_tag'])
+
+        message = self.message % {
+            'instance': data.get('instance', 'server'),
+            'date': release_date,
+            'release_id': data['build_number'],
+            'release_url': data['job_url']
+        }
+
+        for ticket_id in ticket_ids:
+            if not self.tracker.issue(ticket_id).log_release_date(release_date, message=message):
+                status = 'ERROR'
+            log.info('%s: %s', ticket_id, release_date)
+            log.info(message)
+        return status
 
     def wsgi_app(self, environ, start_response):
         request = Request(environ)

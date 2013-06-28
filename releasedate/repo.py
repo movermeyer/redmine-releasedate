@@ -22,5 +22,5 @@ class GitRepo(object):
         return itertools.imap(lambda commit: commit.message, self.commits_log(obj1, obj2))
 
     def tag_date(self, tag_name):
-        tag = self._repo.tag(tag_name)
+        tag = self._repo.tags[tag_name]
         return datetime.datetime.fromtimestamp(tag.tag.tagged_date)

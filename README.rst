@@ -9,6 +9,8 @@ How it works
 
 Upon finishing deploy job, jenkins creates a git tag, so it can track commits that refer to the build.
 We can use these tags to track which tickets were deployed.
+Date of deploy is stored in custom field of each ticket that was mentioned in commit.
+A comment is left for every ticket in release as well for readability.
 
 Installation
 ------------
@@ -21,9 +23,16 @@ Install it where your git repo resides. We only support local git repos, so make
 * ``pip install redmine-releasedate``
 * Specify redmine access options in config.py
 * run ``redmine-release-server`` and make it available via http
+::
 
     # releasedate.cfg
+    [redmine]
+    url = http://example.com
+    token = your_api_token_goes_here
+    released_at_id = 42  ;custom field id goes here
 
+    [releasedate]
+    message = Deployed on %(instance)s at %(date)s in release "%(release_id)s":%(release_url)s
 
 
 Jenkins
@@ -40,6 +49,13 @@ Redmine
 Create a user with permissions to edit tickets and post notes in your project.
 Obtain his API token and put it into ``config.py``.
 Add custom field to store releasedate information.
+
+
+Limitations
+-----------
+* second run of client command will make second comment and overwrite release date, so please make sure
+you run ``redmine-release`` only once per deploy.
+
 
 See also
 --------

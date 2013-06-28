@@ -9,7 +9,8 @@ def get_previous_tag(tag, build_number):
     return tag.replace(build_number, str(int(build_number) - 1))
 
 
-def run(url, repo):
+def run(url=None, repo=None):
+    """ Send POST request to releasedate server after jenkins job is successfully finished"""
     url = url or sys.argv[1]
     repo = repo or sys.argv[2]
 
@@ -21,7 +22,3 @@ def run(url, repo):
         'repo': repo,
     })
     return result
-
-
-if __name__ == '__main__':
-    run()
