@@ -10,6 +10,9 @@ Currently supports git & jenkins.
 .. image:: https://coveralls.io/repos/futurecolors/redmine-releasedate/badge.png?branch=master
     :target: https://coveralls.io/r/futurecolors/redmine-releasedate
 
+.. image:: https://pypip.in/v/redmine-releasedate/badge.png
+    :target: https://crate.io/packages/redmine-releasedate/
+
 How it works
 ------------
 
@@ -55,7 +58,7 @@ Redmine
 ~~~~~~~
 
 Create a user with permissions to edit tickets and post notes in your project.
-Obtain his API token and put it into ``config.py``.
+Obtain his API token and put it into ``releasedate.cfg``.
 Add custom field to store releasedate information.
 
 
