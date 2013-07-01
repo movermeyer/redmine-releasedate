@@ -51,13 +51,19 @@ class TestClient(ReleasedateTestCase):
     def test_client_sent_data(self):
         httpretty.register_uri(httpretty.POST, "http://releasedate-server/", body='OK')
         jenkins.run('http://releasedate-server/', '/path/to/my/repo/')
+        check_against = {
+            'build_number': ['42'],
+            'build_tag': ['jenkins-myjob-42'],
+            'previous_tag': ['jenkins-myjob-41'],
+            'job_url': ['http://jenkins_url/jobs/42/'],
+            'repo': ['/path/to/my/repo/'],
+        }
 
-        self.assertBodyQueryString(**{'build_number': ['42'],
-                                      'build_tag': ['jenkins-myjob-42'],
-                                      'previous_tag': ['jenkins-myjob-41'],
-                                      'job_url': ['http://jenkins_url/jobs/42/'],
-                                      'repo': ['/path/to/my/repo/'],
-                                      })
+        self.assertBodyQueryString(**check_against)
+
+        jenkins.run('http://releasedate-server/', '/path/to/my/repo/', 'myserver')
+        check_against['instance'] = ['myserver']
+        self.assertBodyQueryString(**check_against)
 
 
 class TestRunServer(TestCase):

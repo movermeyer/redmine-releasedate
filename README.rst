@@ -41,20 +41,20 @@ Install it where your git repo resides. We only support local git repos, so make
     released_at_id = 42  ;custom field id goes here
 
     [releasedate]
+    message = Deployed on %(instance)s at %(date)s in release "%(release_id)s":%(release_url)s
     address = 0.0.0.0  ; optional
     port = 8080  ; optional
-    message = Deployed on %(instance)s at %(date)s in release "%(release_id)s":%(release_url)s
 
 
 Jenkins
 ~~~~~~~
 
-* Pip install ``redmine-releasedate`` on your jenkins server.
+* Pip install ``redmine-releasedate`` on your jenkins server. No configuration is needed.
 
-* Add this to your Jenkins build step (preferrably, in `post-build task`_)::
+* Add this to your Jenkins build step (preferably, in `post-build task`_)::
 
     git push --tags
-    redmine-release http://youserver/ /path/to/repo/
+    redmine-release http://releasedate_url/ /path/to/repo/ [instance_url]
 
 
 .. _post-build task: https://wiki.jenkins-ci.org/display/JENKINS/Post+build+task
