@@ -31,7 +31,7 @@ setup(
     description='Track when your features are shipped to production in Redmine.',
     entry_points={
         'console_scripts': [
-            'redmine-release-server = releasedate.server:run',
+            'redmine-release-server = releasedate.server:main',
             'redmine-release = releasedate.jenkins:run',
         ]
     }
