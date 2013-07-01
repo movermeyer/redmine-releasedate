@@ -1,4 +1,5 @@
 # coding: utf-8
+import codecs
 import logging
 import itertools
 import ConfigParser
@@ -78,7 +79,7 @@ def main():
         'port': 8080,
     }
     config = ConfigParser.ConfigParser(defaults=defaults)
-    config.read('releasedate.cfg')
+    config.readfp(codecs.open('releasedate.cfg', 'r', 'utf8'))
     address = config.get('releasedate', 'address')
     port = int(config.get('releasedate', 'port'))
     run_simple(address, port, Releasedate(config))
