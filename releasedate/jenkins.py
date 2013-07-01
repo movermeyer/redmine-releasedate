@@ -23,4 +23,4 @@ def run(url=None, repo=None, instance_url=None):
         'repo': repo,
         'instance': instance_url,
     })
-    return result
+    return result.text
