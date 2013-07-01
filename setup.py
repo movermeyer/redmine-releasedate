@@ -19,7 +19,7 @@ class PyTest(TestCommand):
 
 setup(
     name='redmine-releasedate',
-    version='0.1.1',
+    version='0.1.2',
     packages=['releasedate'],
     url='https://github.com/futurecolors/redmine-releasedate',
     install_requires=['requests', 'GitPython', 'Werkzeug'],
