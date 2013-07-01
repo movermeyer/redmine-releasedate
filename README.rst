@@ -23,6 +23,7 @@ A comment is left for every ticket in release as well for readability.
 
 .. image:: https://raw.github.com/futurecolors/redmine-releasedate/master/screenshots/releasedate.png
 
+
 Installation
 ------------
 
