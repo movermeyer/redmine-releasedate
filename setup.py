@@ -6,7 +6,7 @@ import sys
 class PyTest(TestCommand):
     def finalize_options(self):
         TestCommand.finalize_options(self)
-        self.test_args = []
+        self.test_args = ['test_releasedate.py']
         self.test_suite = True
 
     def run_tests(self):
@@ -22,7 +22,7 @@ setup(
     version='0.1',
     packages=['releasedate'],
     url='https://github.com/futurecolors/redmine-releasedate',
-    requires=['requests', 'GitPython', 'Werkzeug'],
+    install_requires=['requests', 'GitPython', 'Werkzeug'],
     tests_require=['pytest', 'httpretty', 'mock', 'sh'],
     cmdclass={'test': PyTest},
     license='MIT',
@@ -33,5 +33,6 @@ setup(
         'console_scripts': [
             'redmine-release-server = releasedate.server:run',
             'redmine-release = releasedate.jenkins:run',
-    ]}
+        ]
+    }
 )
