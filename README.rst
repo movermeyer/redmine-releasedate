@@ -21,7 +21,7 @@ We can use these tags to track which tickets were deployed.
 Date of deploy is stored in custom field of each ticket that was mentioned in commit.
 A comment is left for every ticket in release as well for readability.
 
-.. image:: https://raw.github.com/futurecolors/redmine-releasedatereleasedate.png
+.. image:: https://raw.github.com/futurecolors/redmine-releasedate/master/screenshots/releasedate.png
 
 Installation
 ------------
