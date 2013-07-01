@@ -33,6 +33,7 @@ class Releasedate(object):
             return Response(status)
 
         except Exception as e:
+            log.exception(e)
             return Response(repr(e), status=500)
 
     def is_valid(self, request):

@@ -49,9 +49,15 @@ Install it where your git repo resides. We only support local git repos, so make
 Jenkins
 ~~~~~~~
 
-Add this to your Jenkins build step::
+* Pip install ``redmine-releasedate`` on your jenkins server.
 
+* Add this to your Jenkins build step (preferrably, in `post-build task`_)::
+
+    git push --tags
     redmine-release http://youserver/ /path/to/repo/
+
+
+.. _post-build task: https://wiki.jenkins-ci.org/display/JENKINS/Post+build+task
 
 
 Redmine

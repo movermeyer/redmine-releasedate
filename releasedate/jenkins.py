@@ -21,4 +21,4 @@ def run(url=None, repo=None):
         'job_url': env['JOB_URL'],
         'repo': repo,
     })
-    return result
+    return result.text

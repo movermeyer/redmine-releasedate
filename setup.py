@@ -19,7 +19,7 @@ class PyTest(TestCommand):
 
 setup(
     name='redmine-releasedate',
-    version='0.1',
+    version='0.1.1',
     packages=['releasedate'],
     url='https://github.com/futurecolors/redmine-releasedate',
     install_requires=['requests', 'GitPython', 'Werkzeug'],
@@ -29,6 +29,7 @@ setup(
     author='Ilya Baryshev',
     author_email='baryhsev@gmail.com',
     description='Track when your features are shipped to production in Redmine.',
+    long_description=open('README.rst').read() + '\n\n' + open('CHANGELOG.rst').read(),
     entry_points={
         'console_scripts': [
             'redmine-release-server = releasedate.server:main',
