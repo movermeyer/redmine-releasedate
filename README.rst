@@ -73,8 +73,8 @@ Add custom field to store releasedate information.
 
 Limitations
 -----------
-* second run of client command will make second comment and overwrite release date, so please make sure
-you run ``redmine-release`` only once per deploy.
+Second run of client command will make second comment and overwrite release date, 
+so please make sure you run ``redmine-release`` only once per deploy.
 
 
 See also
