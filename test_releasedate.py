@@ -151,7 +151,7 @@ class TestWSGI(TestCase):
         os.environ['RELEASEDATE_CONFIG'] = os.path.join(os.path.dirname(__file__), 'releasedate.cfg')
         from releasedate.wsgi import application
         app_iter, status, header = run_wsgi_app(application, create_environ())
-        assert status == 409
+        assert status == '409 CONFLICT'
 
 
 class TestServerErrors(ReleasedateTestCase):
