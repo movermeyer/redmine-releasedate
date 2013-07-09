@@ -30,7 +30,8 @@ Installation
 Server
 ~~~~~~
 
-Install it where your git repo resides. We only support local git repos, so make sure you have enough permissions.
+Install it where your git repo resides. We only support local git repos,
+so make sure you have enough permissions to access git repo files.
 
 * ``pip install redmine-releasedate``
 * Specify redmine access options in ``releasedate.cfg``
@@ -69,6 +70,16 @@ Redmine
 Create a user with permissions to edit tickets and post notes in your project.
 Obtain his API token and put it into ``releasedate.cfg``.
 Add custom field to store releasedate information.
+
+
+Serve as WSGI app
+~~~~~~~~~~~~~~~~~
+
+You can run server as usual wsgi app behind uwsgi or guicorn::
+
+    # your/wsgi/module.py
+    os.environ.setdefault("RELEASEDATE_CONFIG", "path/to/your/releasedate.cfg")
+    from releasedate.wsgi import get_wsgi_application
 
 
 Limitations

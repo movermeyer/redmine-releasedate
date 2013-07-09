@@ -5,6 +5,7 @@ import itertools
 import ConfigParser
 from functools import partial
 from operator import contains
+import os
 
 from werkzeug.serving import run_simple
 from werkzeug.wrappers import Request, Response
@@ -72,18 +73,29 @@ class Releasedate(object):
         return self.wsgi_app(environ, start_response)
 
 
-def main():
-    log.addHandler(logging.StreamHandler())
-    log.setLevel(logging.INFO)
+def get_config():
     defaults = {
         'address': '0.0.0.0',
         'port': 8080,
     }
     config = ConfigParser.ConfigParser(defaults=defaults)
-    config.readfp(codecs.open('releasedate.cfg', 'r', 'utf8'))
+    config_path = os.environ.get('RELEASEDATE_CONFIG', 'releasedate.cfg')
+    print config_path
+    config.readfp(codecs.open(config_path, 'r', 'utf8'))
+    return config
+
+
+def get_wsgi_application():
+    log.addHandler(logging.StreamHandler())
+    log.setLevel(logging.INFO)
+    return Releasedate(get_config())
+
+
+def main():
+    config = get_config()
     address = config.get('releasedate', 'address')
     port = int(config.get('releasedate', 'port'))
-    run_simple(address, port, Releasedate(config))
+    run_simple(address, port, get_wsgi_application())
 
 
 if __name__ == '__main__':

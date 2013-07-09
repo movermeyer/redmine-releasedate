@@ -12,7 +12,7 @@ import sh
 from httpretty import httpretty
 from httpretty.compat import PY3
 
-from werkzeug.test import Client
+from werkzeug.test import Client, run_wsgi_app, create_environ
 from werkzeug.wrappers import BaseResponse
 from releasedate import jenkins
 from releasedate.server import Releasedate, main
@@ -143,6 +143,15 @@ class TestServerOk(ReleasedateTestCase):
         assert response.status_code == 200, response.data
         assert response.data == 'ERROR', response.data
         logger_mock.error.assert_called_with('Redmine update failed: [500] Sorry, we are unavailable')
+
+
+class TestWSGI(TestCase):
+
+    def test_wsgi(self):
+        os.environ['RELEASEDATE_CONFIG'] = os.path.join(os.path.dirname(__file__), 'releasedate.cfg')
+        from releasedate.wsgi import application
+        app_iter, status, header = run_wsgi_app(application, create_environ())
+        assert status == 409
 
 
 class TestServerErrors(ReleasedateTestCase):
