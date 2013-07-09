@@ -133,12 +133,16 @@ class TestServerOk(ReleasedateTestCase):
         json_post = json.loads(httpretty.last_request.body)
         assert json_post['issue']['notes'] == 'Deployed on TestServer at 2006-04-07 22:13:13 in release \"42\":http://jenkins_url/jobs/2/'
 
-    def test_redmine_failure(self):
-        httpretty.register_uri(httpretty.PUT, re.compile("http://example.com/issues/(\d+).json"), status=500)
+    @mock.patch('releasedate.redmine.log')
+    def test_redmine_failure(self, logger_mock):
+        httpretty.register_uri(httpretty.PUT, re.compile("http://example.com/issues/(\d+).json"),
+                               status=500,
+                               body='Sorry, we are unavailable')
         response = self.client.post(data=self.valid_data)
 
         assert response.status_code == 200, response.data
         assert response.data == 'ERROR', response.data
+        logger_mock.error.assert_called_with('Redmine update failed: [500] Sorry, we are unavailable')
 
 
 class TestServerErrors(ReleasedateTestCase):

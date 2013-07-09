@@ -19,11 +19,11 @@ class PyTest(TestCommand):
 
 setup(
     name='redmine-releasedate',
-    version='0.1.2',
+    version='0.1.3dev',
     packages=['releasedate'],
     url='https://github.com/futurecolors/redmine-releasedate',
     install_requires=['requests', 'GitPython', 'Werkzeug'],
-    tests_require=['pytest', 'httpretty', 'mock', 'sh'],
+    tests_require=['pytest', 'httpretty==0.6.2', 'mock', 'sh'],
     cmdclass={'test': PyTest},
     license='MIT',
     author='Ilya Baryshev',

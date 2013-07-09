@@ -5,7 +5,7 @@ import re
 import requests
 
 
-log = logging.getLogger(__name__)
+log = logging.getLogger('redmine-releasedate')
 
 
 class Redmine(object):
