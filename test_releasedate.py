@@ -61,9 +61,15 @@ class TestClient(ReleasedateTestCase):
 
         self.assertBodyQueryString(**check_against)
 
-        jenkins.run('http://releasedate-server/', '/path/to/my/repo/', 'myserver')
+        output = jenkins.run('http://releasedate-server/', '/path/to/my/repo/', 'myserver')
+        assert 'OK' in output
         check_against['instance'] = ['myserver']
         self.assertBodyQueryString(**check_against)
+
+    def test_not_in_env(self):
+        output = jenkins.run('http://releasedate-server/', '/path/to/my/repo/')
+        assert 'Missing "BUILD_NUMBER" env variable.' in output
+        assert len(httpretty.latest_requests) == 0
 
 
 class TestRunServer(TestCase):
