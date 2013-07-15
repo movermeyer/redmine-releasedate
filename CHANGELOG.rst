@@ -4,6 +4,8 @@ Changelog
 0.1.3 (TBA)
 ~~~~~~~~~~~
 * Improved readme and logging
+* ``releasedate.wsgi`` for better interoperability (run server as wsgi app)
+* Proper argument parsing via docopt
 
 0.1.2 (01-07-2013)
 ~~~~~~~~~~~~~~~~~~

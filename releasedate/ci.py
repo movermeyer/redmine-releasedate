@@ -1,6 +1,23 @@
 # coding: utf-8
-import sys
+"""Send POST request to releasedate server after jenkins job is successfully finished
+
+Usage:
+  redmine-release <url> <path_to_repo> [<instance_url>]
+  redmine-release (-h | --help)
+  redmine-release --version
+
+<url> is a URL of your redmine instance.
+<path_to_repo> is an absolute path to git repository (local to releasedate server)
+<instance_url> is URL of a server where the code was deployed (optional)
+
+Options:
+  -h --help     Show this screen.
+  --version     Show version.
+"""
+
 from os import environ as env
+from docopt import docopt
+from releasedate import __version__ as ver
 
 import requests
 
@@ -31,22 +48,19 @@ def get_build_context():
                                    'Launch job via Jenkins, or provide evn variable manually.' % e.message)
 
 
-def run(url=None, repo=None, instance_url=None):
-    """ Send POST request to releasedate server after jenkins job is successfully finished"""
-    url = url or sys.argv[1]
-    repo = repo or sys.argv[2]
-    instance_url = instance_url or sys.argv[3] if len(sys.argv) > 3 else instance_url
+def cli(*args):
+    options = docopt(__doc__, args, version=ver)
     try:
         context = get_build_context()
     except ImproperlyConfigured as e:
         return str(e)
 
-    result = requests.post(url, data={
+    result = requests.post(options['<url>'], data={
         'build_number': context['build_number'],
         'build_tag': context['build_tag'],
         'previous_tag': get_previous_tag(context['build_tag'], context['build_number']),
         'job_url': context['job_url'],
-        'repo': repo,
-        'instance': instance_url,
+        'repo': options['<path_to_repo>'],
+        'instance': options['<instance_url>'],
     })
     return result.text

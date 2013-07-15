@@ -14,7 +14,7 @@ from httpretty.compat import PY3
 
 from werkzeug.test import Client, run_wsgi_app, create_environ
 from werkzeug.wrappers import BaseResponse
-from releasedate import jenkins
+from releasedate import ci
 from releasedate.server import Releasedate, main
 
 
@@ -50,7 +50,7 @@ class TestClient(ReleasedateTestCase):
     })
     def test_client_sent_data(self):
         httpretty.register_uri(httpretty.POST, "http://releasedate-server/", body='OK')
-        jenkins.run('http://releasedate-server/', '/path/to/my/repo/')
+        ci.cli('http://releasedate-server/', '/path/to/my/repo/')
         check_against = {
             'build_number': ['42'],
             'build_tag': ['jenkins-myjob-42'],
@@ -61,13 +61,13 @@ class TestClient(ReleasedateTestCase):
 
         self.assertBodyQueryString(**check_against)
 
-        output = jenkins.run('http://releasedate-server/', '/path/to/my/repo/', 'myserver')
+        output = ci.cli('http://releasedate-server/', '/path/to/my/repo/', 'myserver')
         assert 'OK' in output
         check_against['instance'] = ['myserver']
         self.assertBodyQueryString(**check_against)
 
     def test_not_in_env(self):
-        output = jenkins.run('http://releasedate-server/', '/path/to/my/repo/')
+        output = ci.cli('http://releasedate-server/', '/path/to/my/repo/')
         assert 'Missing "BUILD_NUMBER" env variable.' in output
         assert len(httpretty.latest_requests) == 0
 
