@@ -1,6 +1,8 @@
+import sys
 from setuptools import setup
 from setuptools.command.test import test as TestCommand
-import sys
+
+import releasedate
 
 
 class PyTest(TestCommand):
@@ -19,10 +21,10 @@ class PyTest(TestCommand):
 
 setup(
     name='redmine-releasedate',
-    version='0.1.3dev',
+    version=releasedate.__version__,
     packages=['releasedate'],
     url='https://github.com/futurecolors/redmine-releasedate',
-    install_requires=['requests', 'GitPython', 'Werkzeug'],
+    install_requires=['requests', 'GitPython', 'Werkzeug', 'docopt'],
     tests_require=['pytest', 'httpretty==0.6.2', 'mock', 'sh'],
     cmdclass={'test': PyTest},
     license='MIT',
@@ -33,7 +35,7 @@ setup(
     entry_points={
         'console_scripts': [
             'redmine-release-server = releasedate.server:main',
-            'redmine-release = releasedate.jenkins:run',
+            'redmine-release = releasedate.ci:cli',
         ]
     }
 )
