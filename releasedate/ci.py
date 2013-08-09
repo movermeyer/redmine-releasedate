@@ -15,6 +15,7 @@ Options:
   --version     Show version.
 """
 
+import sys
 from os import environ as env
 from docopt import docopt
 from releasedate import __version__ as ver
@@ -49,7 +50,7 @@ def get_build_context():
 
 
 def cli(*args):
-    options = docopt(__doc__, args, version=ver)
+    options = docopt(__doc__, args or sys.argv[1:], version=ver)
     try:
         context = get_build_context()
     except ImproperlyConfigured as e:
