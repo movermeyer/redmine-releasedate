@@ -1,2 +1,2 @@
 include *.rst
-releasedate.cfg
+include releasedate.cfg
