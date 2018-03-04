@@ -10,7 +10,7 @@ Currently supports git & jenkins.
 .. image:: https://coveralls.io/repos/futurecolors/redmine-releasedate/badge.png?branch=master
     :target: https://coveralls.io/r/futurecolors/redmine-releasedate
 
-.. image:: https://pypip.in/v/redmine-releasedate/badge.png
+.. image:: https://img.shields.io/pypi/v/redmine-releasedate.svg
     :target: https://crate.io/packages/redmine-releasedate/
 
 How it works
